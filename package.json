@@ -1,0 +1,36 @@
+{
+  "name": "convex-mission-control-ui",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@hello-pangea/dnd": "^18.0.1",
+    "@notionhq/client": "^5.9.0",
+    "@steipete/bird": "^0.8.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "convex": "^1.32.0",
+    "googleapis": "^171.4.0",
+    "lucide-react": "^0.511.0",
+    "next": "14.2.32",
+    "puppeteer-core": "^24.37.3",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "sharp": "^0.34.5",
+    "tailwind-merge": "^3.3.1",
+    "youtube-transcript": "^1.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "@types/react": "^18.3.17",
+    "@types/react-dom": "^18.3.5",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3"
+  }
+}

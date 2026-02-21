@@ -1,0 +1,59 @@
+"use client";
+
+import { AGENT_COLORS } from "@/app/lib/utils";
+
+const FALLBACK_AGENTS = [
+  { _id: "randy", name: "randy", role: "COORDINATOR", status: "working", task: "Build Kanban UI", assigned: 2 },
+  { _id: "opus", name: "opus", role: "ARCHITECT", status: "busy", task: "Design API", assigned: 1 },
+  { _id: "codex", name: "codex", role: "BUILDER", status: "working", task: "Implement UI", assigned: 1 },
+  { _id: "tegridy", name: "tegridy", role: "BRAND", status: "active", task: "Write content", assigned: 1 },
+];
+
+function statusColor(status: string) {
+  if (status === "working" || status === "active") return "#4ade80";
+  if (status === "busy") return "#facc15";
+  return "#9ca3af";
+}
+
+export function AgentSidebar({ agents, tasks, selectedAgent, setSelectedAgent }: any) {
+  const source = (agents?.length ? agents : FALLBACK_AGENTS).slice(0, 4);
+
+  return (
+    <aside className="panel h-full p-4">
+      <h3 className="editorial-headline text-base uppercase">Agents</h3>
+      <div className="my-3 h-px bg-[#333333]" />
+
+      <div className="space-y-3">
+        {source.map((agent: any) => {
+          const id = agent._id ?? agent.name;
+          const assigned = tasks?.filter((t: any) => t.assigneeIds?.includes(id)).length ?? agent.assigned ?? 0;
+          const activeTask = tasks?.find((t: any) => t.assigneeIds?.includes(id))?.title ?? agent.task ?? "No active task";
+          const active = selectedAgent === id;
+          const name = (agent.name ?? "agent").toLowerCase();
+
+          return (
+            <button
+              key={id}
+              onClick={() => setSelectedAgent(active ? "all" : id)}
+              className={`w-full rounded-xl border p-3 text-left transition ${
+                active ? "border-[#555555] bg-[#242424]" : "border-[#333333] bg-[#1a1a1a] hover:bg-[#202020]"
+              }`}
+            >
+              <p className="text-sm font-semibold capitalize" style={{ color: AGENT_COLORS[name] ?? "#f5f5f5" }}>
+                {name}
+              </p>
+              <p className="text-[11px] text-[#9ca3af]">{agent.role}</p>
+              <p className="mt-1 inline-flex items-center gap-1 text-xs text-[#d1d5db]">
+                <span className="h-2 w-2 rounded-full" style={{ backgroundColor: statusColor(agent.status) }} />
+                {agent.status ?? "idle"}
+              </p>
+              <div className="my-2 h-px bg-[#333333]" />
+              <p className="line-clamp-1 text-xs text-[#9ca3af]">Task: “{activeTask}”</p>
+              <p className="mt-1 text-xs text-[#9ca3af]">• {assigned} task{assigned === 1 ? "" : "s"} assigned</p>
+            </button>
+          );
+        })}
+      </div>
+    </aside>
+  );
+}
