@@ -56,6 +56,13 @@ export const listAgents = query({
   },
 });
 
+export const getAgentById = query({
+  args: { id: v.id("agents") },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.id);
+  },
+});
+
 export const getAgentsByStatus = query({
   args: {
     status: v.union(v.literal("idle"), v.literal("active"), v.literal("blocked")),

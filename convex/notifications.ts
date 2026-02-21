@@ -46,3 +46,38 @@ export const getUndeliveredNotifications = query({
       .collect();
   },
 });
+
+// For notification daemon - returns full context
+export const getUndeliveredForDelivery = query({
+  args: {},
+  handler: async (ctx) => {
+    const notifications = await ctx.db
+      .query("notifications")
+      .withIndex("by_delivered", (q) => q.eq("delivered", false))
+      .collect();
+
+    // Enrich with agent and task info
+    const enriched = await Promise.all(
+      notifications.map(async (n) => {
+        const fromAgent = n.fromAgentId ? await ctx.db.get(n.fromAgentId) : null;
+        const task = n.taskId ? await ctx.db.get(n.taskId) : null;
+        return {
+          ...n,
+          fromAgentName: fromAgent?.name ?? "Unknown",
+          taskTitle: task?.title ?? "Unknown Task",
+        };
+      })
+    );
+
+    return enriched;
+  },
+});
+
+// Simple mark delivered for daemon
+export const markDelivered = mutation({
+  args: { id: v.id("notifications") },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { delivered: true });
+    return { ok: true };
+  },
+});
