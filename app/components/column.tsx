@@ -16,7 +16,7 @@ export function Column({ id, title, tasks, agentsById, messageCounts, onCardClic
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className={`flex min-h-[480px] flex-col gap-2 rounded-lg p-1 transition ${snapshot.isDraggingOver ? "bg-[#252525]" : ""}`}
+            className={`flex min-h-[320px] flex-col gap-2 rounded-lg p-1 transition ${snapshot.isDraggingOver ? "bg-[#252525]" : ""}`}
           >
             {tasks.map((task: any, index: number) => (
               <Draggable key={task._id} draggableId={task._id} index={index}>
