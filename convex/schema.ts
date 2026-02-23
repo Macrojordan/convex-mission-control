@@ -65,13 +65,13 @@ export default defineSchema({
   documents: defineTable({
     title: v.string(),
     content: v.string(), // Markdown
-    type: v.union(v.literal("deliverable"), v.literal("research"), v.literal("protocol")),
+    type: v.union(v.literal("deliverable"), v.literal("research"), v.literal("protocol"), v.literal("note")),
     taskId: v.optional(v.id("tasks")),
     createdBy: v.id("agents"),
     createdAt: v.number(),
   }).index("by_task", ["taskId"]),
 
-  // Table 6: Notifications (@mentions)
+  // Table 6: Notifications (@mentions + thread updates)
   notifications: defineTable({
     mentionedAgentId: v.id("agents"),
     content: v.string(),
@@ -81,4 +81,15 @@ export default defineSchema({
   })
     .index("by_agent", ["mentionedAgentId"])
     .index("by_delivered", ["delivered"]),
+
+  // Table 7: Thread subscriptions
+  subscriptions: defineTable({
+    agentId: v.id("agents"),
+    taskId: v.id("tasks"),
+    subscribedAt: v.number(),
+    reason: v.union(v.literal("commented"), v.literal("assigned"), v.literal("mentioned")),
+  })
+    .index("by_task", ["taskId"])
+    .index("by_agent", ["agentId"])
+    .index("by_agent_task", ["agentId", "taskId"]),
 });

@@ -59,11 +59,10 @@ export const getUndeliveredForDelivery = query({
     // Enrich with agent and task info
     const enriched = await Promise.all(
       notifications.map(async (n) => {
-        const fromAgent = n.fromAgentId ? await ctx.db.get(n.fromAgentId) : null;
         const task = n.taskId ? await ctx.db.get(n.taskId) : null;
         return {
           ...n,
-          fromAgentName: fromAgent?.name ?? "Unknown",
+          fromAgentName: "Unknown",
           taskTitle: task?.title ?? "Unknown Task",
         };
       })
